@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:runard/splash.dart';
 
-const assetImage = AssetImage('assets/logo.png');
+void main(){
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Runard',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Splash(),
+    );
+  }
+}
+
+
+/*const assetImage = AssetImage('assets/logo.png');
 const image = Image(image: assetImage);
 void main() {
   runApp(MaterialApp(
@@ -67,4 +85,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
+}*/
