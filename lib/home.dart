@@ -3,6 +3,8 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'gpx_parse.dart';
 
+import 'dbhelper.dart';
+
 class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -10,6 +12,8 @@ class MyHomePage extends StatelessWidget {
     final ButtonStyle style = TextButton.styleFrom(
       // Changer couleur bouton ou police
     );
+    //Permet de tester la base de donnée
+    DbHelper.instance.insert();
     return Scaffold(
       appBar: AppBar( // Bar menu
         centerTitle: false,
