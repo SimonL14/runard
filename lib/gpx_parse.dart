@@ -1,73 +1,82 @@
-import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:xml/xml.dart' as xml;
 
-Future<List<xml.XmlElement>> searchElements(String gpxContent) async {
-  xml.XmlDocument document = xml.XmlDocument.parse(gpxContent);
-  print(document.findAllElements('rtept').toList());
-  return document.findAllElements('rtept').toList();
+class GPXMap extends StatefulWidget {
+  @override
+  _GPXMapState createState() => _GPXMapState();
 }
 
-/*
-class MyListView extends StatelessWidget {
+class _GPXMapState extends State<GPXMap> {
+  List<Marker> _markers = [];
+  List<LatLng> _polylinePoints = [];
 
   @override
-  Future<Widget> build(BuildContext context) async {
+  void initState() {
+    super.initState();
+    _loadGPXData();
+  }
 
-    WidgetsFlutterBinding.ensureInitialized();
-    String gpxContent = await rootBundle.loadString('assets/data/test.gpx');
+  Future<void> _loadGPXData() async {
+    String gpxContent = await rootBundle.loadString('assets/data/test2.gpx');
+    var document = xml.XmlDocument.parse(gpxContent);
 
-    List<xml.XmlElement> rteptElements = await searchElements(gpxContent);
+    for (var trkpt in document.findAllElements('trkpt')) {
+      double lat, lon;
+      try {
+        lat = double.parse(trkpt.attributes.firstWhere((node) => node.name.local == 'lat').value);
+        lon = double.parse(trkpt.attributes.firstWhere((node) => node.name.local == 'lon').value);
 
-    final tiles = rteptElements.map((rtept) {
-      final lat = rtept.getAttribute('lat');
-      final lon = rtept.getAttribute('lon');
-      return ListTile(
-          title: Text('Latitude: $lat'),
-          subtitle: Text('Longitude: $lon'),
+      } on FormatException catch (e) {
+        print("An error occured while parsing latitude and longitude: $e");
+        continue;
+      }
+      _polylinePoints.add(LatLng(lat, lon));
+      var marker = Marker(
+        width: 80.0,
+        height: 80.0,
+        point: LatLng(lat, lon),
+        builder: (ctx) => Container(
+          child: Icon(Icons.flag_circle, color: Colors.red, size: 10),
+        ),
       );
-    }).toList();
+      _markers.add(marker);
+    }
+    setState(() {});
+  }
 
-    return ListView(
-      children: tiles,
+  @override
+  Widget build(BuildContext context) {
+    return FlutterMap(
+      options: MapOptions(
+        center:  _polylinePoints[1],
+        zoom: 13.0,
+      ),
+      children: [
+        TileLayer(
+          urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+          userAgentPackageName: 'dev.fleaflet.flutter_map.example',
+        ),
+        MarkerLayer(markers: _markers),
+        PolylineLayer(
+          polylines: [
+            Polyline(
+              points: _polylinePoints,
+              strokeWidth: 4.0,
+              color: Colors.blue,
+            ),
+          ],
+        ),
+      ],
     );
   }
 }
-*/
 
-void main() async {
-  // Charge le contenu du fichier gpx à partir de son chemin d'accès
-  WidgetsFlutterBinding.ensureInitialized();
-  String gpxContent = await rootBundle.loadString('assets/data/test.gpx');
 
-  // Recherche tous les éléments <rtept>
-  List<xml.XmlElement> rteptElements = await searchElements(gpxContent);
-  /*
-    for (final rtept in rteptElements) {
-      print('lat: ${rtept.getAttribute('lat')}');
-      print('lon: ${rtept.getAttribute('lon')}');
-    }
-  */
-  runApp(
-    MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("GPX data"),
-        ),
-        body: ListView.builder(
-          itemCount: rteptElements.length,
-          itemBuilder: (context, index) {
-            final rtept = rteptElements[index];
-            return ListTile(
-              title: Text(rtept.findElements('name').first.text),
-              subtitle: Text("lat: ${rtept.getAttribute('lat')}\nlon: ${rtept.getAttribute('lon')}"),
-            );
-          },
-        ),
-      ),
-    ),
-  );
-}
-//This will display a ListView with each item containing the lat and lon attributes of the rtept element as the title and subtitle, respectively.
+
+
+
+
+

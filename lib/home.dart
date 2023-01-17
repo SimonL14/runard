@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'gpx_parse.dart';
 
 class MyHomePage extends StatelessWidget {
   @override
@@ -38,26 +39,15 @@ class MyHomePage extends StatelessWidget {
                 color: Color(0xFF001420),
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
-          child: Column(
-            children: [
-              Text("Dernier parcours :", style: TextStyle(fontSize: 20,color: Colors.white)),
-              SizedBox(height: 26),
-              Container(
-                width: 348,
-                height: 212,
-                child: FlutterMap(
-                  options: MapOptions(
-                    center: LatLng(48.8566, 2.3522),
-                    zoom: 12.0,
+              padding: EdgeInsets.only(top: 15.0, left: 0.0),
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Text("    Dernier parcours :", style: TextStyle(fontSize: 20,color: Colors.white)),
                   ),
-                  children: [
-                    TileLayer(
-                      urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                      userAgentPackageName: 'dev.fleaflet.flutter_map.example',
-                    ),
-                  ],
-                    ),
-                  ),
+                  SizedBox(height: 10),
+                  SizedBox(child: GPXMap(), height: 212, width: 348,),
                 ],
               ),
             ),
