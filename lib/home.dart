@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'gpx_parse.dart';
-
 import 'dbhelper.dart';
 
 class MyHomePage extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     backgroundColor: Color(0xFF0386E8F);
@@ -14,7 +14,10 @@ class MyHomePage extends StatelessWidget {
     );
     //Permet de tester la base de donnée
     DbHelper.instance.insert();
+
+
     return Scaffold(
+
       appBar: AppBar( // Bar menu
         centerTitle: false,
         titleSpacing: 0.0,
@@ -37,13 +40,13 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Container(
-              width: 350.0,
-              height: 325.0,
+              width: 325.0,
+              height: 300.0,
               decoration: BoxDecoration(
                 color: Color(0xFF001420),
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),
               ),
-              padding: EdgeInsets.only(top: 15.0, left: 0.0),
+              padding: EdgeInsets.only(top: 10.0, left: 0.0),
               child: Column(
                 children: [
                   Align(
@@ -52,6 +55,11 @@ class MyHomePage extends StatelessWidget {
                   ),
                   SizedBox(height: 10),
                   SizedBox(child: GPXMap(), height: 212, width: 348,),
+                  SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.center,
+                    child: Text("STATS", style: TextStyle(fontSize: 20,color: Colors.white)),
+                  ),
                 ],
               ),
             ),
@@ -59,7 +67,7 @@ class MyHomePage extends StatelessWidget {
 
 
             Container(
-              width: 350.0,
+              width: 325.0,
               height: 70.0,
               decoration: BoxDecoration(
                 color: Color(0xFF001420),
@@ -73,8 +81,8 @@ class MyHomePage extends StatelessWidget {
             ),
 
             Container(
-              width: 350.0,
-              height: 310.0,
+              width: 325.0,
+              height: 275.0,
               decoration: BoxDecoration(
                 color: Color(0xFF001420),
                 borderRadius: BorderRadius.all(Radius.circular(20.0)),

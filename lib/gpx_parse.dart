@@ -10,6 +10,7 @@ class GPXMap extends StatefulWidget {
 }
 
 class _GPXMapState extends State<GPXMap> {
+
   List<Marker> _markers = [];
   List<LatLng> _polylinePoints = [];
 
@@ -19,39 +20,91 @@ class _GPXMapState extends State<GPXMap> {
     _loadGPXData();
   }
 
+
   Future<void> _loadGPXData() async {
     String gpxContent = await rootBundle.loadString('assets/data/test2.gpx');
     var document = xml.XmlDocument.parse(gpxContent);
 
+    int _calculateTotalTime() {
+      int totalTime = 0;
+      for (int i = 0; i < _polylinePoints.length - 1; i++) {
+        var timeAtCurrentPoint = DateTime.parse(document.findAllElements('time').elementAt(i).text);
+        var timeAtNextPoint = DateTime.parse(document.findAllElements('time').elementAt(i+1).text);
+        var difference = timeAtNextPoint.difference(timeAtCurrentPoint);
+        totalTime += difference.inSeconds;
+      }
+      return totalTime;
+    }
+
+
     for (var trkpt in document.findAllElements('trkpt')) {
       double lat, lon;
       try {
-        lat = double.parse(trkpt.attributes.firstWhere((node) => node.name.local == 'lat').value);
-        lon = double.parse(trkpt.attributes.firstWhere((node) => node.name.local == 'lon').value);
-
+        lat = double.parse(trkpt.attributes
+            .firstWhere((node) => node.name.local == 'lat')
+            .value);
+        lon = double.parse(trkpt.attributes
+            .firstWhere((node) => node.name.local == 'lon')
+            .value);
       } on FormatException catch (e) {
         print("An error occured while parsing latitude and longitude: $e");
         continue;
       }
       _polylinePoints.add(LatLng(lat, lon));
-      var marker = Marker(
+    }
+    int totalTime = _calculateTotalTime();
+    int totalTimeSeconde = totalTime%60;
+    int totalTimeMinute = (totalTime/60%60).round();
+    int totalTimeHeure = (totalTime/60/60).toInt();
+
+    print("Total temps : $totalTimeHeure h $totalTimeMinute min $totalTimeSeconde s");
+    double totalDistance = _calculateTotalDistance();
+    print("Total distance : $totalDistance km");
+    double totalVitesse = _calculateTotalDistance()*1000/_calculateTotalTime();
+    print("Total vitesse : $totalVitesse m/s");
+
+
+    var markerfin = Marker(
+      width: 30.0,
+      height: 30.0,
+      point: _polylinePoints[_polylinePoints.length - 1],
+      builder: (ctx) => Container(
+        child: Image.asset("assets/flag.png",),
+      ),
+    );
+    _markers.add(markerfin);
+
+      var markerdebut =  Marker(
         width: 80.0,
         height: 80.0,
-        point: LatLng(lat, lon),
+        point: _polylinePoints.first,
         builder: (ctx) => Container(
-          child: Icon(Icons.flag_circle, color: Colors.red, size: 10),
+          child: Icon(Icons.flag, color: Color(0xFF112349), size: 30),
         ),
       );
-      _markers.add(marker);
-    }
+      _markers.add(markerdebut);
     setState(() {});
   }
+  double _calculateTotalDistance() {
+    double totalDistance = 0;
+    for (int i = 0; i < _polylinePoints.length - 1; i++) {
+      totalDistance += Distance().distance(
+        _polylinePoints[i],
+        _polylinePoints[i + 1],
+      );
+    }
+    return totalDistance / 1000; // convert meters to kilometers
+  }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        center:  _polylinePoints[1],
+        center:  _polylinePoints.first,
         zoom: 13.0,
       ),
       children: [
@@ -59,13 +112,17 @@ class _GPXMapState extends State<GPXMap> {
           urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
           userAgentPackageName: 'dev.fleaflet.flutter_map.example',
         ),
-        MarkerLayer(markers: _markers),
+
+
+        MarkerLayer(markers: _markers
+
+        ),
         PolylineLayer(
           polylines: [
             Polyline(
               points: _polylinePoints,
               strokeWidth: 4.0,
-              color: Colors.blue,
+              color:Color(0xFF0394DE),
             ),
           ],
         ),
