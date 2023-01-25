@@ -1,7 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import 'package:build_runner/build_runner.dart';
-
 part 'points_dto.g.dart';
 
 @JsonSerializable() // Permet de générer des méthodes from et toJson
