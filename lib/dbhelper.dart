@@ -46,15 +46,6 @@ class DbHelper{
     const String createPointsTableQuery = 'CREATE TABLE points (id integer PRIMARY KEY AUTOINCREMENT, lat VARCHAR(200) NOT NULL, long VARCHAR(200) NOT NULL, ele VARCHAR(200) NOT NULL, time VARCHAR(200) NOT NULL, parcoursid integer NOT NULL, FOREIGN KEY(parcoursid) REFERENCES parcours(id))';
     db.execute(createPointsTableQuery);
     print('Création de la table points');
-
-    //Ajout d'une clé étrangère sur le parcoursid
-    //const String alterpointsTable ='ALTER TABLE points ADD KEY parcoursid (parcoursid)';
-    //db.execute(alterpointsTable);
-
-    //const String createContraiteParcours ='ALTER TABLE points ADD CONSTRAINT points_parcoursid FOREIGN KEY (parcoursid) REFERENCES parcours (id)';
-    //db.execute(createContraiteParcours);
-    //print(createContraiteParcours);
-    //print('Création de la Contrainte');
   }
 
   //Déclenché losque le numéro de version est augmenté
@@ -72,6 +63,9 @@ class DbHelper{
   Future<void> insert() async{
     //Récupération de l'instance de la db
     Database db = await instance.database;
+    //final String insertWord = "INSERT into words (author,content,latitude,longitude,wordsId) values ('${wordDTO.author}','${wordDTO.content}',${wordDTO.latitude},${wordDTO.longitude},${wordDTO.uid})";
+    //var execute = db.execute(insertWord);
+    //return execute;
     print('insert ok');
   }
 }
