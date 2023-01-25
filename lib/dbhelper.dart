@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:path/path.dart';
+import 'package:runard/parcours_dto.dart';
+import 'package:runard/points_dto.dart';
 import 'package:sqflite/sqflite.dart';
 
 // Class qui permet de centralser la connexion, la création de la base de donnée
@@ -60,12 +62,23 @@ class DbHelper{
   }
 
   //Permet d'insert dans une base de donnée
-  Future<void> insert() async{
+  Future<void> insertParcours(final ParcoursDTO parcoursDTO, final PointsDTO pointsDTO) async{
     //Récupération de l'instance de la db
     Database db = await instance.database;
-    //final String insertWord = "INSERT into words (author,content,latitude,longitude,wordsId) values ('${wordDTO.author}','${wordDTO.content}',${wordDTO.latitude},${wordDTO.longitude},${wordDTO.uid})";
-    //var execute = db.execute(insertWord);
-    //return execute;
+    final String insertParcours = "INSERT into parcours (id,nom,date) values ('${parcoursDTO.id}','${parcoursDTO.nom}',${parcoursDTO.date})";
+    var execute = db.execute(insertParcours);
     print('insert ok');
+    return execute;
+  }
+
+  //Permet d'insert dans une base de donnée
+  Future<void> insertPoints(final PointsDTO pointsDTO) async{
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+    final String insertPoints = "INSERT into points (id,nom,date) values ('${pointsDTO.id}','${pointsDTO.lat}',${pointsDTO.long},${pointsDTO.ele},${pointsDTO.time},${pointsDTO.parcoursid})";
+    var execute = db.execute(insertPoints );
+    print('insert ok');
+    return execute;
+
   }
 }

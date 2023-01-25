@@ -16,7 +16,6 @@ class MyHomePage extends StatelessWidget {
       // Changer couleur bouton ou police
     );
     //Permet de tester la base de donnée
-    DbHelper.instance.insert();
     return Scaffold(
 
       appBar: AppBar( // Bar menu
