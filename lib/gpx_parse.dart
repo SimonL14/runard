@@ -4,6 +4,15 @@ import 'package:latlong2/latlong.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:xml/xml.dart' as xml;
 
+Future<List<xml.XmlElement>> searchElementstrkpt(String gpxContent) async {
+  xml.XmlDocument document = xml.XmlDocument.parse(gpxContent);
+  return document.findAllElements('trkpt').toList();
+}
+Future<List<xml.XmlElement>> searchElementstrk(String gpxContent) async {
+  xml.XmlDocument document = xml.XmlDocument.parse(gpxContent);
+  return document.findAllElements('trk').toList();
+}
+
 class GPXMap extends StatefulWidget {
   @override
   _GPXMapState createState() => _GPXMapState();
@@ -18,6 +27,7 @@ class _GPXMapState extends State<GPXMap> {
   void initState() {
     super.initState();
     _loadGPXData();
+    _ImportGPX();
   }
 
 
@@ -85,6 +95,26 @@ class _GPXMapState extends State<GPXMap> {
       _markers.add(markerdebut);
     setState(() {});
   }
+
+  Future<void> _ImportGPX() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    String gpxContent = await rootBundle.loadString('assets/data/test2.gpx');
+
+    //List<xml.XmlElement> rteptElementstrkpt = await searchElementstrkpt(gpxContent);
+    List<xml.XmlElement> rteptElementstrk = await searchElementstrk(gpxContent);
+      print(rteptElementstrk);
+      for (final trk in rteptElementstrk) {
+        print('${trk.getElement('name')?.text}');
+        print('${trk.getElement('time')?.text}');
+      }
+    //for (final rtept in rteptElementstrkpt) {
+    //  print('lat: ${rtept.getAttribute('lat')}');
+    //  print('lon: ${rtept.getAttribute('lon')}');
+    //  print('time: ${rtept.getElement('time')?.text}');
+    //  print('ele: ${rtept.getElement('ele')?.text}');
+    //}
+  }
+
   double _calculateTotalDistance() {
     double totalDistance = 0;
     for (int i = 0; i < _polylinePoints.length - 1; i++) {

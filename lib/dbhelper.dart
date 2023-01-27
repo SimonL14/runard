@@ -62,7 +62,7 @@ class DbHelper{
   }
 
   //Permet d'insert dans une base de donnée
-  Future<void> insertParcours(final ParcoursDTO parcoursDTO, final PointsDTO pointsDTO) async{
+  Future<void> insertParcours(final ParcoursDTO parcoursDTO) async{
     //Récupération de l'instance de la db
     Database db = await instance.database;
     final String insertParcours = "INSERT into parcours (id,nom,date) values ('${parcoursDTO.id}','${parcoursDTO.nom}',${parcoursDTO.date})";
