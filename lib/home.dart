@@ -51,6 +51,19 @@ class MyHomePage extends StatelessWidget {
                 Navigator.push(context, MaterialPageRoute(builder: (context) => ParcoursListe()));
               },
             ),
+            ListTile(
+              title: Row(
+                children: [
+                  Icon(Icons.add_circle_outline),
+                  SizedBox(width: 10),
+                  Text("Importer", style: TextStyle(fontSize: 20,color: Colors.white)),
+                ],
+              ),
+              onTap: () {
+                print("hello");
+                openFiles();
+              },
+            ),
           ],
         ),
       ),

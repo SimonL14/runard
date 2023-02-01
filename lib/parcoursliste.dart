@@ -11,8 +11,7 @@ class ParcoursListe extends StatelessWidget {
     final ButtonStyle style = TextButton.styleFrom(
       // Changer couleur bouton ou police
     );
-    //Permet de tester la base de donnée
-    DbHelper.instance.insert();
+
 
 
     return Scaffold(

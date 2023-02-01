@@ -7,6 +7,7 @@ import 'package:runard/points_dto.dart';
 import 'package:xml/xml.dart' as xml;
 
 import 'dbhelper.dart';
+import 'import.dart';
 
 Future<List<xml.XmlElement>> searchElementstrkpt(String gpxContent) async {
   xml.XmlDocument document = xml.XmlDocument.parse(gpxContent);
@@ -38,7 +39,7 @@ class _GPXMapState extends State<GPXMap> {
     String gpxContent = await rootBundle.loadString('assets/data/test2.gpx');
     var document = xml.XmlDocument.parse(gpxContent);
 
-    int _calculateTotalTime() {
+   /* int _calculateTotalTime() {
       int totalTime = 0;
       for (int i = 0; i < _polylinePoints.length - 1; i++) {
         var timeAtCurrentPoint = DateTime.parse(document.findAllElements('time').elementAt(i).text);
@@ -47,7 +48,7 @@ class _GPXMapState extends State<GPXMap> {
         totalTime += difference.inSeconds;
       }
       return totalTime;
-    }
+    }*/
 
     for (var trkpt in document.findAllElements('trkpt')) {
       double lat, lon;
@@ -64,6 +65,8 @@ class _GPXMapState extends State<GPXMap> {
       }
       _polylinePoints.add(LatLng(lat, lon));
     }
+
+    /*
     int totalTime = _calculateTotalTime();
     int totalTimeSeconde = totalTime%60;
     int totalTimeMinute = (totalTime/60%60).round();
@@ -74,7 +77,7 @@ class _GPXMapState extends State<GPXMap> {
     print("Total distance : $totalDistance km");
     double totalVitesse = _calculateTotalDistance()*1000/_calculateTotalTime();
     print("Total vitesse : $totalVitesse m/s");
-
+*/
 
     var markerfin = Marker(
       width: 30.0,
@@ -161,7 +164,7 @@ class _GPXMapState extends State<GPXMap> {
     return FlutterMap(
       options: MapOptions(
         center:  _polylinePoints.first,
-        zoom: 13.0,
+        zoom: 15.0,
       ),
       children: [
         TileLayer(
