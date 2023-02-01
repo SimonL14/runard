@@ -7,7 +7,7 @@
   xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd"
   xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1">
 <trk>
-  <name><![CDATA[Running 11/27/22 9:47 am]]></name>
+  <name>Coucou cest le Runard</name>
   <time>2022-11-27T08:47:01Z</time>
 <trkseg>
 <trkpt lat="50.764038000" lon="2.721689000"><ele>31.5</ele><time>2022-11-27T08:47:01Z</time></trkpt>
