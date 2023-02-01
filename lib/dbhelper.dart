@@ -9,7 +9,7 @@ class DbHelper{
   // Création de constantes (dbName = nom base de donnée // dbPathName = nom du fichier sur le tel qui stock les données // dbVersion = version de la bdd)
   static const dbName = 'runard.db'; // nom schema
   static const dbPathName = 'runard.path'; // nom du fichier sur le tel
-  static const dbVersion = 13; // numéro de version du schema (pour les upgrades)
+  static const dbVersion = 18; // numéro de version du schema (pour les upgrades)
 
   //Instance de connexion à la base de donnée
   static Database? _database;
@@ -62,10 +62,10 @@ class DbHelper{
   }
 
   //Permet d'insert dans une base de donnée
-  Future<void> insertParcours(final ParcoursDTO parcoursDTO, final PointsDTO pointsDTO) async{
+  Future<void> insertParcours(final ParcoursDTO parcoursDTO) async{
     //Récupération de l'instance de la db
     Database db = await instance.database;
-    final String insertParcours = "INSERT into parcours (id,nom,date) values ('${parcoursDTO.id}','${parcoursDTO.nom}',${parcoursDTO.date})";
+    final String insertParcours = "INSERT into parcours (id,nom,date) values (${parcoursDTO.id},'${parcoursDTO.nom}','${parcoursDTO.date}')";
     var execute = db.execute(insertParcours);
     print('insert ok');
     return execute;
@@ -75,10 +75,15 @@ class DbHelper{
   Future<void> insertPoints(final PointsDTO pointsDTO) async{
     //Récupération de l'instance de la db
     Database db = await instance.database;
-    final String insertPoints = "INSERT into points (id,nom,date) values ('${pointsDTO.id}','${pointsDTO.lat}',${pointsDTO.long},${pointsDTO.ele},${pointsDTO.time},${pointsDTO.parcoursid})";
+    final String insertPoints = "INSERT into points (id,lat,long,ele,time,parcoursid) values (${pointsDTO.id},'${pointsDTO.lat}','${pointsDTO.long}','${pointsDTO.ele}','${pointsDTO.time}',${pointsDTO.parcoursid})";
     var execute = db.execute(insertPoints );
-    print('insert ok');
+    print('insert ok db');
     return execute;
+  }
 
+  Future<int> getLastParcoursId() async {
+    Database db = await instance.database;
+    final getParcoursId = await db.rawQuery("Select max(id) FROM parcours");
+    return getParcoursId[0]['max(id)'] as int;
   }
 }
