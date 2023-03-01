@@ -7,6 +7,7 @@ import 'package:runard/points_dto.dart';
 import 'package:xml/xml.dart' as xml;
 
 import 'dbhelper.dart';
+import 'import.dart';
 
 Future<List<xml.XmlElement>> searchElementstrkpt(String gpxContent) async {
   xml.XmlDocument document = xml.XmlDocument.parse(gpxContent);
@@ -33,11 +34,12 @@ class _GPXMapState extends State<GPXMap> {
     _ImportGPX();
   }
 
+
   Future<void> _loadGPXData() async {
     String gpxContent = await rootBundle.loadString('assets/data/test2.gpx');
     var document = xml.XmlDocument.parse(gpxContent);
 
-    int _calculateTotalTime() {
+   /* int _calculateTotalTime() {
       int totalTime = 0;
       for (int i = 0; i < _polylinePoints.length - 1; i++) {
         var timeAtCurrentPoint = DateTime.parse(document.findAllElements('time').elementAt(i).text);
@@ -46,7 +48,7 @@ class _GPXMapState extends State<GPXMap> {
         totalTime += difference.inSeconds;
       }
       return totalTime;
-    }
+    }*/
 
     for (var trkpt in document.findAllElements('trkpt')) {
       double lat, lon;
@@ -63,6 +65,8 @@ class _GPXMapState extends State<GPXMap> {
       }
       _polylinePoints.add(LatLng(lat, lon));
     }
+
+    /*
     int totalTime = _calculateTotalTime();
     int totalTimeSeconde = totalTime%60;
     int totalTimeMinute = (totalTime/60%60).round();
@@ -73,7 +77,7 @@ class _GPXMapState extends State<GPXMap> {
     print("Total distance : $totalDistance km");
     double totalVitesse = _calculateTotalDistance()*1000/_calculateTotalTime();
     print("Total vitesse : $totalVitesse m/s");
-
+*/
 
     var markerfin = Marker(
       width: 30.0,
@@ -113,6 +117,7 @@ class _GPXMapState extends State<GPXMap> {
 
         final ParcoursDTO parcours = ParcoursDTO(null,name,date);
         DbHelper.instance.insertParcours(parcours);
+        print('insert ok gpx');
 
         // print('${trk.getElement('name')?.text}');
         // print('${trk.getElement('time')?.text}');
@@ -120,21 +125,25 @@ class _GPXMapState extends State<GPXMap> {
 
       }
     int parcoursId = await DbHelper.instance.getLastParcoursId() as int;
+    int countrtept = 0;
     for (final rtept in rteptElementstrkpt) {
-      String? lat = rtept.getAttribute('lat');
-      String? lon = rtept.getAttribute('lat');
-      String time = rtept.getElement('time')!.text;
-      String ele = rtept.getElement('ele')!.text;
-      final PointsDTO points = PointsDTO(null,lat,lon,ele,time,parcoursId);
-      await DbHelper.instance.insertPoints(points);
+      countrtept = countrtept + 1;
+      if (countrtept % 3 == 0 || countrtept == 1 || countrtept == rteptElementstrkpt.length) {
+        String? lat = rtept.getAttribute('lat');
+        String? lon = rtept.getAttribute('lon');
+        String time = rtept.getElement('time')!.text;
+        String ele = rtept.getElement('ele')!.text;
+        final PointsDTO points = PointsDTO(
+            null, lat, lon, ele, time, parcoursId);
+        await DbHelper.instance.insertPoints(points);
 
-     //  print('lat: ${rtept.getAttribute('lat')}');
-     // print('lon: ${rtept.getAttribute('lon')}');
-     // print('time: ${rtept.getElement('time')?.text}');
-     // print('ele: ${rtept.getElement('ele')?.text}');
+         //print('lat: ${rtept.getAttribute('lat')}');
+         //print('lon: ${rtept.getAttribute('lon')}');
+         //print('time: ${rtept.getElement('time')?.text}');
+         //print('ele: ${rtept.getElement('ele')?.text}');
 
 
-
+      }
     }
   }
 
@@ -151,13 +160,14 @@ class _GPXMapState extends State<GPXMap> {
 
 
 
+
+
   @override
   Widget build(BuildContext context) {
-    tqt();
     return FlutterMap(
       options: MapOptions(
         center:  _polylinePoints.first,
-        zoom: 13.0,
+        zoom: 15.0,
       ),
       children: [
         TileLayer(
@@ -183,11 +193,7 @@ class _GPXMapState extends State<GPXMap> {
   }
 }
 
-Future<List<ParcoursDTO>> tqt() async {
-DbHelper instance = DbHelper.instance;
-List<ParcoursDTO> allWords = await DbHelper.instance.getAllParcours();
-return allWords;
-}
+
 
 
 
