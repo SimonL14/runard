@@ -9,7 +9,7 @@ class DbHelper{
   // Création de constantes (dbName = nom base de donnée // dbPathName = nom du fichier sur le tel qui stock les données // dbVersion = version de la bdd)
   static const dbName = 'runard.db'; // nom schema
   static const dbPathName = 'runard.path'; // nom du fichier sur le tel
-  static const dbVersion = 18; // numéro de version du schema (pour les upgrades)
+  static const dbVersion = 19; // numéro de version du schema (pour les upgrades)
 
   //Instance de connexion à la base de donnée
   static Database? _database;
@@ -67,7 +67,7 @@ class DbHelper{
     Database db = await instance.database;
     final String insertParcours = "INSERT into parcours (id,nom,date) values (${parcoursDTO.id},'${parcoursDTO.nom}','${parcoursDTO.date}')";
     var execute = db.execute(insertParcours);
-    print('insert ok');
+    print(insertParcours);
     return execute;
   }
 
@@ -77,7 +77,7 @@ class DbHelper{
     Database db = await instance.database;
     final String insertPoints = "INSERT into points (id,lat,long,ele,time,parcoursid) values (${pointsDTO.id},'${pointsDTO.lat}','${pointsDTO.long}','${pointsDTO.ele}','${pointsDTO.time}',${pointsDTO.parcoursid})";
     var execute = db.execute(insertPoints );
-    print('insert ok db');
+    print(insertPoints);
     return execute;
   }
 
