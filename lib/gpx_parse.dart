@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:runard/parcours_dto.dart';
 import 'package:runard/points_dto.dart';
 import 'package:xml/xml.dart' as xml;
+import 'package:tuple/tuple.dart';
 
 import 'dbhelper.dart';
 import 'import.dart';
@@ -116,8 +117,7 @@ class _GPXMapState extends State<GPXMap> {
         print(date);
 
         final ParcoursDTO parcours = ParcoursDTO(null,name,date);
-        DbHelper.instance.insertParcours(parcours);
-        print('insert ok gpx');
+        // DbHelper.instance.insertParcours(parcours);
 
         // print('${trk.getElement('name')?.text}');
         // print('${trk.getElement('time')?.text}');
@@ -136,7 +136,6 @@ class _GPXMapState extends State<GPXMap> {
         final PointsDTO points = PointsDTO(
             null, lat, lon, ele, time, parcoursId);
         // await DbHelper.instance.insertPoints(points);
-        print(await DbHelper.instance.getAllParcours());
 
          //print('lat: ${rtept.getAttribute('lat')}');
          //print('lon: ${rtept.getAttribute('lon')}');
@@ -146,6 +145,10 @@ class _GPXMapState extends State<GPXMap> {
 
       }
     }
+    final parcoursget = await DbHelper.instance.getAllParcours();
+    final parcoursgetpoints = await parcoursget.item1;
+    final parcoursgetparcour = await parcoursget.item2;
+    print(parcoursgetparcour);
   }
 
   double _calculateTotalDistance() {
