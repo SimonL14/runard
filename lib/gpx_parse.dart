@@ -33,7 +33,6 @@ class _GPXMapState extends State<GPXMap> {
     _ImportGPX();
   }
 
-
   Future<void> _loadGPXData() async {
     String gpxContent = await rootBundle.loadString('assets/data/test2.gpx');
     var document = xml.XmlDocument.parse(gpxContent);
@@ -114,7 +113,6 @@ class _GPXMapState extends State<GPXMap> {
 
         final ParcoursDTO parcours = ParcoursDTO(null,name,date);
         DbHelper.instance.insertParcours(parcours);
-        print('insert ok gpx');
 
         // print('${trk.getElement('name')?.text}');
         // print('${trk.getElement('time')?.text}');
@@ -128,8 +126,7 @@ class _GPXMapState extends State<GPXMap> {
       String time = rtept.getElement('time')!.text;
       String ele = rtept.getElement('ele')!.text;
       final PointsDTO points = PointsDTO(null,lat,lon,ele,time,parcoursId);
-      DbHelper.instance.insertPoints(points);
-      print('insert ok point');
+      await DbHelper.instance.insertPoints(points);
 
      //  print('lat: ${rtept.getAttribute('lat')}');
      // print('lon: ${rtept.getAttribute('lon')}');
@@ -154,10 +151,9 @@ class _GPXMapState extends State<GPXMap> {
 
 
 
-
-
   @override
   Widget build(BuildContext context) {
+    tqt();
     return FlutterMap(
       options: MapOptions(
         center:  _polylinePoints.first,
@@ -187,7 +183,11 @@ class _GPXMapState extends State<GPXMap> {
   }
 }
 
-
+Future<List<ParcoursDTO>> tqt() async {
+DbHelper instance = DbHelper.instance;
+List<ParcoursDTO> allWords = await DbHelper.instance.getAllParcours();
+return allWords;
+}
 
 
 
