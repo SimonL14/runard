@@ -135,7 +135,8 @@ class _GPXMapState extends State<GPXMap> {
         String ele = rtept.getElement('ele')!.text;
         final PointsDTO points = PointsDTO(
             null, lat, lon, ele, time, parcoursId);
-        await DbHelper.instance.insertPoints(points);
+        // await DbHelper.instance.insertPoints(points);
+        print(await DbHelper.instance.getAllParcours());
 
          //print('lat: ${rtept.getAttribute('lat')}');
          //print('lon: ${rtept.getAttribute('lon')}');
