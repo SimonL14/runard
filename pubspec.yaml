@@ -41,12 +41,14 @@ dependencies:
   latlong2: ^0.8.1
   freezed_annotation: ^2.0.3
   sqflite: ^2.2.0+3
-  path: ^1.8.2
   xml_parser: ^1.0.0
   xml: ^6.1.0
   path_provider: ^2.0.11
   gpx: ^2.2.1
   flutter_spinkit: ^5.1.0
+  io: ^1.0.4
+  path: ^1.8.3
+  file_picker: ^5.2.5
 
 dev_dependencies:
   build_runner: ^2.3.3
@@ -100,6 +102,7 @@ flutter:
     - assets/data/
     - assets/data/test.gpx
     - assets/flag.png
+    - assets/test.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
