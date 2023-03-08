@@ -124,9 +124,8 @@ class _GPXMapState extends State<GPXMap> {
 
 
       }
-    int parcoursId = await DbHelper.instance.getLastParcoursId() as int;
-     await DbHelper.instance.getLatestParcours(parcoursId);
 
+    int parcoursId = await DbHelper.instance.getLastParcoursId() as int;
 
 
     int countrtept = 0;
@@ -149,6 +148,15 @@ class _GPXMapState extends State<GPXMap> {
 
       }
     }
+
+    //Obtenir le dernier parcours ( à afficher sur la page d'accueil)
+    final lastparcours = await DbHelper.instance.getLatestParcours(parcoursId);
+    final lastparcours1 = await lastparcours.item1;
+    final lastparcours2 = await lastparcours.item2;
+
+    print('last parcours: $lastparcours');
+    print('last 1 : $lastparcours1');
+    print('last 2 : $lastparcours2');
     final parcoursget = await DbHelper.instance.getAllParcours();
     final parcoursgetpoints = await parcoursget.item1;
     final parcoursgetparcour = await parcoursget.item2;
