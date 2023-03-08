@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:runard/splash.dart';
 
-void main(){
+void main() async{
   runApp(MyApp());
+
 }
 
 class MyApp extends StatelessWidget {

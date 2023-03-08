@@ -7,14 +7,14 @@ part of 'parcours_dto.dart';
 // **************************************************************************
 
 ParcoursDTO _$ParcoursDTOFromJson(Map<String, dynamic> json) => ParcoursDTO(
-      json['id'] as int?,
+      json['parcoursid'] as int?,
       json['nom'] as String?,
       json['date'] as String?,
     );
 
 Map<String, dynamic> _$ParcoursDTOToJson(ParcoursDTO instance) =>
     <String, dynamic>{
-      'id': instance.id,
+      'parcoursid': instance.parcoursid,
       'nom': instance.nom,
       'date': instance.date,
     };

@@ -5,6 +5,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:runard/parcours_dto.dart';
 import 'package:runard/points_dto.dart';
 import 'package:xml/xml.dart' as xml;
+import 'package:tuple/tuple.dart';
 
 import 'dbhelper.dart';
 import 'import.dart';
@@ -121,32 +122,51 @@ class _GPXMapState extends State<GPXMap> {
         print(date);
 
         final ParcoursDTO parcours = ParcoursDTO(null,name,date);
-        DbHelper.instance.insertParcours(parcours);
-        print('insert ok gpx');
+        // DbHelper.instance.insertParcours(parcours);
 
         // print('${trk.getElement('name')?.text}');
         // print('${trk.getElement('time')?.text}');
 
 
       }
+
     int parcoursId = await DbHelper.instance.getLastParcoursId() as int;
+
+
+    int countrtept = 0;
     for (final rtept in rteptElementstrkpt) {
-      String? lat = rtept.getAttribute('lat');
-      String? lon = rtept.getAttribute('lat');
-      String time = rtept.getElement('time')!.text;
-      String ele = rtept.getElement('ele')!.text;
-      final PointsDTO points = PointsDTO(null,lat,lon,ele,time,parcoursId);
-      DbHelper.instance.insertPoints(points);
-      print('insert ok point');
+      countrtept = countrtept + 1;
+      if (countrtept % 3 == 0 || countrtept == 1 || countrtept == rteptElementstrkpt.length) {
+        String? lat = rtept.getAttribute('lat');
+        String? lon = rtept.getAttribute('lon');
+        String time = rtept.getElement('time')!.text;
+        String ele = rtept.getElement('ele')!.text;
+        final PointsDTO points = PointsDTO(
+            null, lat, lon, ele, time, parcoursId);
+        // await DbHelper.instance.insertPoints(points);
 
-     //  print('lat: ${rtept.getAttribute('lat')}');
-     // print('lon: ${rtept.getAttribute('lon')}');
-     // print('time: ${rtept.getElement('time')?.text}');
-     // print('ele: ${rtept.getElement('ele')?.text}');
+         //print('lat: ${rtept.getAttribute('lat')}');
+         //print('lon: ${rtept.getAttribute('lon')}');
+         //print('time: ${rtept.getElement('time')?.text}');
+         //print('ele: ${rtept.getElement('ele')?.text}');
 
 
-
+      }
     }
+
+    //Obtenir le dernier parcours ( à afficher sur la page d'accueil)
+    final lastparcours = await DbHelper.instance.getLatestParcours(parcoursId);
+    final lastparcours1 = await lastparcours.item1;
+    final lastparcours2 = await lastparcours.item2;
+
+    print('last parcours: $lastparcours');
+    print('last 1 : $lastparcours1');
+    print('last 2 : $lastparcours2');
+    final parcoursget = await DbHelper.instance.getAllParcours();
+    final parcoursgetpoints = await parcoursget.item1;
+    final parcoursgetparcour = await parcoursget.item2;
+
+    print(parcoursgetparcour);
   }
 
   double _calculateTotalDistance() {
