@@ -125,6 +125,10 @@ class _GPXMapState extends State<GPXMap> {
 
       }
     int parcoursId = await DbHelper.instance.getLastParcoursId() as int;
+     await DbHelper.instance.getLatestParcours(parcoursId);
+
+
+
     int countrtept = 0;
     for (final rtept in rteptElementstrkpt) {
       countrtept = countrtept + 1;
@@ -148,6 +152,7 @@ class _GPXMapState extends State<GPXMap> {
     final parcoursget = await DbHelper.instance.getAllParcours();
     final parcoursgetpoints = await parcoursget.item1;
     final parcoursgetparcour = await parcoursget.item2;
+
     print(parcoursgetparcour);
   }
 

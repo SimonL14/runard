@@ -117,4 +117,22 @@ class DbHelper{
     return Tuple2(Future.value(resultspts),Future.value(resultsparc));
 
   }
+
+  //Obtenir le dernier parcours
+  Future<Tuple2<Future<List<PointsDTO>>, Future<List<ParcoursDTO>>>> getLatestParcours(lastParcoursId) async {
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+
+    // execution query
+    final getlastparcours = await db.rawQuery("SELECT * from parcours INNER JOIN  points on parcours.id = points.parcoursid WHERE points.parcoursid = ${lastParcoursId}");
+
+    // On initialise un liste de parcours vide
+    final List<PointsDTO> resultLastPoints = <PointsDTO>[];
+    final List<ParcoursDTO> resultLastParcours = <ParcoursDTO>[];
+
+    print(getlastparcours);
+
+    return Tuple2(Future.value(resultLastPoints),Future.value(resultLastParcours));
+
+  }
 }
