@@ -192,7 +192,7 @@ class _GPXMapState extends State<GPXMap> {
         boundsOptions: FitBoundsOptions(
           padding: EdgeInsets.all(20.0),
         ),
-        interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+        interactiveFlags: InteractiveFlag.none,
       ),
       children: [
         TileLayer(
