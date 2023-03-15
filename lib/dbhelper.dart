@@ -98,7 +98,6 @@ class DbHelper{
     final List<PointsDTO> resultspts = <PointsDTO>[];
     final List<ParcoursDTO> resultsparc = <ParcoursDTO>[];
 
-    print(resultSet);
     //On parcours les résultats
     for (var r in resultSet){
       // on instancie un ParcoursDTO sur la base de r
@@ -131,7 +130,6 @@ class DbHelper{
     final List<PointsDTO> resultLastPoints = <PointsDTO>[];
     final List<ParcoursDTO> resultLastParcours = <ParcoursDTO>[];
 
-    print('requete : ${getlastparcours}');
 
     //On parcours les résultats
     for (var r in getlastparcours) {
@@ -148,6 +146,23 @@ class DbHelper{
 
 
     return Tuple2(Future.value(resultLastPoints),Future.value(resultLastParcours));
+
+  }
+
+  Future<List<PointsDTO>>getAllPointsParcours(parcoursid) async{
+
+    Database db = await instance.database;
+
+    final getAllPoints = await db.rawQuery("SELECT * from points WHERE points.parcoursid = ${parcoursid}");
+
+    final List<PointsDTO> allPoints = <PointsDTO>[];
+
+    for (var r in getAllPoints) {
+      var parcourspoints = PointsDTO.fromMap(r);
+      allPoints.add(parcourspoints);
+    }
+
+    return allPoints;
 
   }
 }
