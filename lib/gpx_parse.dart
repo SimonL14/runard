@@ -57,15 +57,11 @@ class _GPXMapState extends State<GPXMap> {
       return totalTime;
     }*/
 
-    for (var trkpt in document.findAllElements('trkpt')) {
+    for (var point in await widget.points) {
       double lat, lon;
       try {
-        lat = double.parse(trkpt.attributes
-            .firstWhere((node) => node.name.local == 'lat')
-            .value);
-        lon = double.parse(trkpt.attributes
-            .firstWhere((node) => node.name.local == 'lon')
-            .value);
+        lat = double.parse(point.lat!);
+        lon = double.parse(point.long!);
       } on FormatException catch (e) {
         print("An error occured while parsing latitude and longitude: $e");
         continue;

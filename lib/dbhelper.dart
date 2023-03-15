@@ -104,10 +104,13 @@ class DbHelper{
       var parcourpts = PointsDTO.fromMap(r);
       // on l'ajoute sand la liste de resultat
       resultspts.add(parcourpts);
-      if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
+      if (
+          int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1
+          && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid']
+          || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
       {
         // on instancie un ParcoursDTO sur la base de r
-        var parcourparc = ParcoursDTO.fromMap(r);
+        var parcourparc = ParcoursDTO.fromMap(resultSet[int.parse(r['id'].toString())]);
         // on l'ajoute sand la liste de resultat
         resultsparc.add(parcourparc);
       }
