@@ -40,7 +40,7 @@ class _GPXMapState extends State<GPXMap> {
   }
 
 
-  Future<void> _loadGPXData(points) async {
+  Future<void> _loadGPXData() async {
     String gpxContent = await rootBundle.loadString('assets/data/test2.gpx');
     var document = xml.XmlDocument.parse(gpxContent);
 
