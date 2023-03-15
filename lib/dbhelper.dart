@@ -98,6 +98,7 @@ class DbHelper{
     final List<PointsDTO> resultspts = <PointsDTO>[];
     final List<ParcoursDTO> resultsparc = <ParcoursDTO>[];
 
+    print(resultSet);
     //On parcours les résultats
     for (var r in resultSet){
       // on instancie un ParcoursDTO sur la base de r
@@ -130,6 +131,7 @@ class DbHelper{
     final List<PointsDTO> resultLastPoints = <PointsDTO>[];
     final List<ParcoursDTO> resultLastParcours = <ParcoursDTO>[];
 
+    print('requete : ${getlastparcours}');
 
     //On parcours les résultats
     for (var r in getlastparcours) {
@@ -143,26 +145,39 @@ class DbHelper{
       // on l'ajoute sand la liste de resultat
       resultLastParcours.add(lastparcoursparcours);
     }
-
-
     return Tuple2(Future.value(resultLastPoints),Future.value(resultLastParcours));
 
   }
 
   Future<List<PointsDTO>>getAllPointsParcours(parcoursid) async{
-
     Database db = await instance.database;
-
     final getAllPoints = await db.rawQuery("SELECT * from points WHERE points.parcoursid = ${parcoursid}");
-
     final List<PointsDTO> allPoints = <PointsDTO>[];
-
     for (var r in getAllPoints) {
       var parcourspoints = PointsDTO.fromMap(r);
       allPoints.add(parcourspoints);
     }
-
     return allPoints;
-
   }
+
+  //Permet de supprimer
+  Future<void> deleteParcours(id) async{
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+    final String suppPoints = "DELETE * FROM points WHERE parcoursid = ${id}";
+    final String suppParcours = "DELETE FROM parcours WHERE id = ${id}";
+    db.execute(suppPoints);
+    db.execute(suppParcours);
+  }
+
+
+  //Permet de modifier un point du parcours
+  Future<void> modifPoints(id, newLat, newLon, newEle) async{
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+    final String modifParcours = "UPDATE points SET lat = ${newLat}, long = ${newLon}, ele = ${newEle} WHERE id = ${id}";
+    db.execute(modifParcours);
+    print("requete modif dbhelp");
+  }
+
 }
