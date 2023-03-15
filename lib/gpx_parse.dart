@@ -44,6 +44,8 @@ class _GPXMapState extends State<GPXMap> {
     String gpxContent = await rootBundle.loadString('assets/data/test2.gpx');
     var document = xml.XmlDocument.parse(gpxContent);
 
+    LatLngBounds bounds = LatLngBounds.fromPoints(_polylinePoints);
+
    /* int _calculateTotalTime() {
       int totalTime = 0;
       for (int i = 0; i < _polylinePoints.length - 1; i++) {
@@ -103,7 +105,10 @@ class _GPXMapState extends State<GPXMap> {
         ),
       );
       _markers.add(markerdebut);
-    setState(() {});
+    setState(() {
+      // Adapter la vue à la position des points
+      bounds = LatLngBounds.fromPoints(_polylinePoints);
+    });
   }
 
   Future<void> _ImportGPX() async {
@@ -188,8 +193,11 @@ class _GPXMapState extends State<GPXMap> {
   Widget build(BuildContext context) {
     return FlutterMap(
       options: MapOptions(
-        center:  _polylinePoints.first,
-        zoom: 15.0,
+        bounds: LatLngBounds.fromPoints(_polylinePoints),
+        boundsOptions: FitBoundsOptions(
+          padding: EdgeInsets.all(20.0),
+        ),
+        interactiveFlags: InteractiveFlag.none,
       ),
       children: [
         TileLayer(
