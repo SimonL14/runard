@@ -154,6 +154,8 @@ class _GPXMapState extends State<GPXMap> {
       }
     }
 
+    final updateParcours = await DbHelper.instance.modifPoints(1, '77.777777777', '8.888888888', '99.9');
+
     //Obtenir le dernier parcours ( à afficher sur la page d'accueil)
     final lastparcours = await DbHelper.instance.getLatestParcours(parcoursId);
     final lastparcours1 = await lastparcours.item1;
@@ -166,8 +168,12 @@ class _GPXMapState extends State<GPXMap> {
     final parcoursgetpoints = await parcoursget.item1;
     final parcoursgetparcour = await parcoursget.item2;
 
-    print(parcoursgetparcour);
+    print(parcoursgetpoints);
+
+
+
   }
+
 
   double _calculateTotalDistance() {
     double totalDistance = 0;

@@ -4,8 +4,8 @@ import 'package:file_picker/file_picker.dart';
 import 'package:runard/parcours_dto.dart';
 import 'package:runard/points_dto.dart';
 import 'package:xml/xml.dart' as xml;
-import 'GPXMapHome.dart';
 import 'dbhelper.dart';
+import 'gpx_parse.dart';
 
 
   void openFiles() async {

@@ -122,7 +122,6 @@ class DbHelper{
   Future<Tuple2<Future<List<PointsDTO>>, Future<List<ParcoursDTO>>>> getLatestParcours(lastParcoursId) async {
     //Récupération de l'instance de la db
     Database db = await instance.database;
-    print('requete : ${lastParcoursId}');
 
     // execution query
     final getlastparcours = await db.rawQuery("SELECT * from parcours INNER JOIN  points on parcours.id = points.parcoursid WHERE points.parcoursid = ${lastParcoursId}");
@@ -131,7 +130,6 @@ class DbHelper{
     final List<PointsDTO> resultLastPoints = <PointsDTO>[];
     final List<ParcoursDTO> resultLastParcours = <ParcoursDTO>[];
 
-    print('requete : ${getlastparcours}');
 
     //On parcours les résultats
     for (var r in getlastparcours) {
@@ -150,4 +148,25 @@ class DbHelper{
     return Tuple2(Future.value(resultLastPoints),Future.value(resultLastParcours));
 
   }
+
+  //Permet de supprimer
+  Future<void> deleteParcours(id) async{
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+    final String suppPoints = "DELETE * FROM points WHERE parcoursid = ${id}";
+    final String suppParcours = "DELETE FROM parcours WHERE id = ${id}";
+    db.execute(suppPoints);
+    db.execute(suppParcours);
+  }
+
+
+  //Permet de modifier un point du parcours
+  Future<void> modifPoints(id, newLat, newLon, newEle) async{
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+    final String modifParcours = "UPDATE points SET lat = ${newLat}, long = ${newLon}, ele = ${newEle} WHERE id = ${id}";
+    db.execute(modifParcours);
+    print("requete modif dbhelp");
+  }
+
 }
