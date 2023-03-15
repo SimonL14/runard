@@ -122,6 +122,7 @@ class DbHelper{
   Future<Tuple2<Future<List<PointsDTO>>, Future<List<ParcoursDTO>>>> getLatestParcours(lastParcoursId) async {
     //Récupération de l'instance de la db
     Database db = await instance.database;
+    print('requete : ${lastParcoursId}');
 
     // execution query
     final getlastparcours = await db.rawQuery("SELECT * from parcours INNER JOIN  points on parcours.id = points.parcoursid WHERE points.parcoursid = ${lastParcoursId}");
@@ -130,6 +131,7 @@ class DbHelper{
     final List<PointsDTO> resultLastPoints = <PointsDTO>[];
     final List<ParcoursDTO> resultLastParcours = <ParcoursDTO>[];
 
+    print('requete : ${getlastparcours}');
 
     //On parcours les résultats
     for (var r in getlastparcours) {
@@ -143,10 +145,19 @@ class DbHelper{
       // on l'ajoute sand la liste de resultat
       resultLastParcours.add(lastparcoursparcours);
     }
-
-
     return Tuple2(Future.value(resultLastPoints),Future.value(resultLastParcours));
 
+  }
+
+  Future<List<PointsDTO>>getAllPointsParcours(parcoursid) async{
+    Database db = await instance.database;
+    final getAllPoints = await db.rawQuery("SELECT * from points WHERE points.parcoursid = ${parcoursid}");
+    final List<PointsDTO> allPoints = <PointsDTO>[];
+    for (var r in getAllPoints) {
+      var parcourspoints = PointsDTO.fromMap(r);
+      allPoints.add(parcourspoints);
+    }
+    return allPoints;
   }
 
   //Permet de supprimer

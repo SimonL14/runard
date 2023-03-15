@@ -20,6 +20,9 @@ Future<List<xml.XmlElement>> searchElementstrk(String gpxContent) async {
 }
 
 class GPXMap extends StatefulWidget {
+  final Future<List<PointsDTO>> points;
+  GPXMap({required this.points});
+
   @override
   _GPXMapState createState() => _GPXMapState();
 }
@@ -32,7 +35,6 @@ class _GPXMapState extends State<GPXMap> {
   void initState() {
     super.initState();
     _loadGPXData();
-    _ImportGPX();
   }
 
 
@@ -157,23 +159,21 @@ class _GPXMapState extends State<GPXMap> {
     final updateParcours = await DbHelper.instance.modifPoints(1, '77.777777777', '8.888888888', '99.9');
 
     //Obtenir le dernier parcours ( à afficher sur la page d'accueil)
-    final lastparcours = await DbHelper.instance.getLatestParcours(parcoursId);
-    final lastparcours1 = await lastparcours.item1;
-    final lastparcours2 = await lastparcours.item2;
+    final lastparcourspoints = await DbHelper.instance.getLatestParcours(parcoursId);
+    final lastPoints = await lastparcourspoints.item1;
+    final lastParcourslist = await lastparcourspoints.item2;
+    final lastParcours = lastParcourslist[0];
 
-    print('last parcours: $lastparcours');
-    print('last 1 : $lastparcours1');
-    print('last 2 : $lastparcours2');
+    print('last points : $lastPoints');
+    print('last parcours : $lastParcours');
+
     final parcoursget = await DbHelper.instance.getAllParcours();
     final parcoursgetpoints = await parcoursget.item1;
     final parcoursgetparcour = await parcoursget.item2;
 
+    print(parcoursgetpoints[0].lat);
     print(parcoursgetpoints);
-
-
-
   }
-
 
   double _calculateTotalDistance() {
     double totalDistance = 0;
@@ -198,7 +198,7 @@ class _GPXMapState extends State<GPXMap> {
         boundsOptions: FitBoundsOptions(
           padding: EdgeInsets.all(20.0),
         ),
-        interactiveFlags: InteractiveFlag.pinchZoom | InteractiveFlag.drag,
+        interactiveFlags: InteractiveFlag.none,
       ),
       children: [
         TileLayer(
