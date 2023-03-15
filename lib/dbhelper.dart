@@ -152,6 +152,18 @@ class DbHelper{
 
   }
 
+  Future<List<PointsDTO>>getAllPointsParcoursfut(Future<int> parcoursid) async{
+    Database db = await instance.database;
+    final ParcoursId = await parcoursid;
+    final getAllPoints = await db.rawQuery("SELECT * from points WHERE points.parcoursid = ${ParcoursId}");
+    final List<PointsDTO> allPoints = <PointsDTO>[];
+    for (var r in getAllPoints) {
+      var parcourspoints = PointsDTO.fromMap(r);
+      allPoints.add(parcourspoints);
+    }
+    return allPoints;
+  }
+
   Future<List<PointsDTO>>getAllPointsParcours(parcoursid) async{
     Database db = await instance.database;
     final getAllPoints = await db.rawQuery("SELECT * from points WHERE points.parcoursid = ${parcoursid}");
