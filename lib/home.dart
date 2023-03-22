@@ -8,7 +8,10 @@ import 'dbhelper.dart';
 
 class MyHomePage extends StatelessWidget {
 
-
+  Future<Map<String, Object?>> sommekm() async {
+    final somme = await DbHelper.instance.getSommekm();
+    return somme;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -114,14 +117,27 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
 
-            Container(
-              width: 325.0,
-              height: 275.0,
-              decoration: BoxDecoration(
-                color: Color(0xFF001420),
-                borderRadius: BorderRadius.all(Radius.circular(20.0)),
-              ),
-            ),
+            FutureBuilder<Map<String, Object?>>(
+                future: sommekm(),
+                builder: (context, AsyncSnapshot<Map<String, Object?>> snapshot) {
+                    return Container(
+                      width: 325.0,
+                      height: 275.0,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF001420),
+                        borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      ),
+                      child: Column(
+                        children: [
+                          Text(
+                              snapshot.data!['SUM(km)'].toString(),
+                              style: TextStyle(fontSize: 20,
+                                  color: Colors.white)
+                          )
+                        ],
+                      ),
+                    );
+                })
           ],
         ),
       ),

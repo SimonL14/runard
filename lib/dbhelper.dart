@@ -232,4 +232,10 @@ class DbHelper{
     return Tuple2(Future.value(resultspts),Future.value(resultsparc));
 
   }
+
+  Future<Map<String, Object?>> getSommekm() async {
+    Database db = await instance.database;
+    final getSommekm = await db.rawQuery("SELECT SUM(km) FROM parcours");
+    return getSommekm[0];
+  }
 }
