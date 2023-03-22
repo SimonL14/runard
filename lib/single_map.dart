@@ -8,10 +8,13 @@ import 'home.dart';
 
 class SingleMap extends StatelessWidget {
 
+  Future<int> id;
+
+  SingleMap({required this.id});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: GPXMap()
+        body: GPXMap(points: DbHelper.instance.getAllPointsParcoursfut(DbHelper.instance.getLastParcoursId()))
     );
   }
 }

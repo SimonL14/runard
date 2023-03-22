@@ -87,15 +87,16 @@ class ParcoursListe extends StatelessWidget {
                                 child: GPXMap(points: DbHelper.instance.getAllPointsParcours(snapshot.data!.item2[i].parcoursid)), height: 172, width: 348,),
                               SizedBox(height: 7),
                               GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => SingleMap(id: DbHelper.instance.getLastParcoursId()),
-                                  ),
-                                );
-                              },
-                              child: Text("Voir",style: TextStyle(fontSize: 20,color: Colors.white)),),
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => SingleMap(id: DbHelper.instance.getLastParcoursId()),
+                                    ),
+                                  );
+                                },
+                                child: Text("Voir",style: TextStyle(fontSize: 20,color: Colors.white)),
+                              ),
                             ],
                           ),
                         ),
@@ -113,11 +114,4 @@ class ParcoursListe extends StatelessWidget {
         }
     );
   }
-
-
-
-
-
-
-
 }
