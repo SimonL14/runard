@@ -105,10 +105,13 @@ class DbHelper{
       var parcourpts = PointsDTO.fromMap(r);
       // on l'ajoute sand la liste de resultat
       resultspts.add(parcourpts);
-      if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
+      if (
+          int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1
+          && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid']
+          || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
       {
         // on instancie un ParcoursDTO sur la base de r
-        var parcourparc = ParcoursDTO.fromMap(r);
+        var parcourparc = ParcoursDTO.fromMap(resultSet[int.parse(r['id'].toString())]);
         // on l'ajoute sand la liste de resultat
         resultsparc.add(parcourparc);
       }
@@ -147,6 +150,18 @@ class DbHelper{
     }
     return Tuple2(Future.value(resultLastPoints),Future.value(resultLastParcours));
 
+  }
+
+  Future<List<PointsDTO>>getAllPointsParcoursfut(Future<int> parcoursid) async{
+    Database db = await instance.database;
+    final ParcoursId = await parcoursid;
+    final getAllPoints = await db.rawQuery("SELECT * from points WHERE points.parcoursid = ${ParcoursId}");
+    final List<PointsDTO> allPoints = <PointsDTO>[];
+    for (var r in getAllPoints) {
+      var parcourspoints = PointsDTO.fromMap(r);
+      allPoints.add(parcourspoints);
+    }
+    return allPoints;
   }
 
   Future<List<PointsDTO>>getAllPointsParcours(parcoursid) async{

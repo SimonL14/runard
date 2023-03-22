@@ -86,7 +86,7 @@ class MyHomePage extends StatelessWidget {
                     child: Text("    Dernier parcours :", style: TextStyle(fontSize: 20,color: Colors.white)),
                   ),
                   SizedBox(height: 10),
-                  SizedBox(child: GPXMap(points: DbHelper.instance.getAllPointsParcours(DbHelper.instance.getLastParcoursId())), height: 212, width: 348,),
+                  SizedBox(child: GPXMap(points: DbHelper.instance.getAllPointsParcoursfut(DbHelper.instance.getLastParcoursId())), height: 212, width: 348,),
                   SizedBox(height: 10),
                   Align(
                     alignment: Alignment.center,
