@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:runard/parcours_dto.dart';
 import 'package:runard/points_dto.dart';
+import 'package:runard/single_map.dart';
 import 'gpx_parse.dart';
 import 'dbhelper.dart';
 import 'home.dart';
@@ -12,7 +13,7 @@ class ParcoursListe extends StatelessWidget {
     final parcoursget = await DbHelper.instance.getAllParcours();
     final parcoursgetpoints = await parcoursget.item1;
     final parcoursgetparcour = await parcoursget.item2;
-    print(DbHelper.instance.getAllPointsParcours(1));
+    //print(DbHelper.instance.getAllPointsParcours(1));
     return Tuple2(parcoursgetpoints,parcoursgetparcour);
   }
 
@@ -68,7 +69,7 @@ class ParcoursListe extends StatelessWidget {
                         SizedBox(height: 10),
                         Container(
                           width: 350.0,
-                          height: 220.0,
+                          height: 250.0,
                           decoration: BoxDecoration(
                             color: Color(0xFF001420),
                             borderRadius: BorderRadius.all(Radius.circular(10.0)),
@@ -81,8 +82,20 @@ class ParcoursListe extends StatelessWidget {
                                 child: Text("  "+snapshot.data!.item2[i].nom.toString(), style: TextStyle(fontSize: 20,color: Colors.white)),
                               ),
                               SizedBox(height: 10),
+
                               SizedBox(
                                 child: GPXMap(points: DbHelper.instance.getAllPointsParcours(snapshot.data!.item2[i].parcoursid)), height: 172, width: 348,),
+                              SizedBox(height: 7),
+                              GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => SingleMap(id: DbHelper.instance.getLastParcoursId()),
+                                  ),
+                                );
+                              },
+                              child: Text("Voir",style: TextStyle(fontSize: 20,color: Colors.white)),),
                             ],
                           ),
                         ),
