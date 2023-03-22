@@ -28,9 +28,11 @@ class GPXMap extends StatefulWidget {
 }
 
 class _GPXMapState extends State<GPXMap> {
-
+  bool isLoading = true;
+  String errorMsg = '';
   List<Marker> _markers = [];
   List<LatLng> _polylinePoints = [];
+
   @override
   void initState() {
     super.initState();
@@ -44,7 +46,7 @@ class _GPXMapState extends State<GPXMap> {
 
     LatLngBounds bounds = LatLngBounds.fromPoints(_polylinePoints);
 
-   /* int _calculateTotalTime() {
+    /* int _calculateTotalTime() {
       int totalTime = 0;
       for (int i = 0; i < _polylinePoints.length - 1; i++) {
         var timeAtCurrentPoint = DateTime.parse(document.findAllElements('time').elementAt(i).text);
@@ -60,11 +62,14 @@ class _GPXMapState extends State<GPXMap> {
       try {
         lat = double.parse(point.lat!);
         lon = double.parse(point.long!);
-      } on FormatException catch (e) {
-        print("An error occured while parsing latitude and longitude: $e");
-        continue;
+        _polylinePoints.add(LatLng(lat, lon));
+      } catch (e) {
+        setState(() {
+          errorMsg = 'Veuillez insérer une carte.';
+          isLoading = false;
+        });
       }
-      _polylinePoints.add(LatLng(lat, lon));
+
     }
 
     /*
@@ -84,26 +89,30 @@ class _GPXMapState extends State<GPXMap> {
       width: 30.0,
       height: 30.0,
       point: _polylinePoints[_polylinePoints.length - 1],
-      builder: (ctx) => Container(
-        child: Image.asset("assets/flag.png",),
-      ),
+      builder: (ctx) =>
+          Container(
+            child: Image.asset("assets/flag.png",),
+          ),
     );
     _markers.add(markerfin);
 
-      var markerdebut =  Marker(
-        width: 80.0,
-        height: 80.0,
-        point: _polylinePoints.first,
-        builder: (ctx) => Container(
-          child: Icon(Icons.flag, color: Color(0xFF112349), size: 30),
-        ),
-      );
-      _markers.add(markerdebut);
+    var markerdebut = Marker(
+      width: 80.0,
+      height: 80.0,
+      point: _polylinePoints.first,
+      builder: (ctx) =>
+          Container(
+            child: Icon(Icons.flag, color: Color(0xFF112349), size: 30),
+          ),
+    );
+    _markers.add(markerdebut);
     setState(() {
       // Adapter la vue à la position des points
       bounds = LatLngBounds.fromPoints(_polylinePoints);
+      isLoading = false;
     });
   }
+
 
   Future<void> _ImportGPX() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -188,7 +197,15 @@ class _GPXMapState extends State<GPXMap> {
 
   @override
   Widget build(BuildContext context) {
-    return FlutterMap(
+    return isLoading
+        ? Center(
+      child: CircularProgressIndicator(),
+    )
+        : errorMsg.isNotEmpty
+        ? Center(
+      child: Text(errorMsg),
+    )
+    : FlutterMap(
       options: MapOptions(
         bounds: LatLngBounds.fromPoints(_polylinePoints),
         boundsOptions: FitBoundsOptions(
