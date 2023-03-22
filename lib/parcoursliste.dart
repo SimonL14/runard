@@ -11,8 +11,6 @@ class ParcoursListe extends StatelessWidget {
 
   Future<Tuple2<List<PointsDTO>, List<ParcoursDTO>>> callAsyncFetch() async {
     final parcoursget = await DbHelper.instance.getAllParcours();
-    final somme = await DbHelper.instance.getSommekm();
-    print(somme['SUM(km)']);
     final parcoursgetpoints = await parcoursget.item1;
     final parcoursgetparcour = await parcoursget.item2;
     return Tuple2(parcoursgetpoints,parcoursgetparcour);
