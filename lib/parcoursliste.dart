@@ -67,7 +67,16 @@ class ParcoursListe extends StatelessWidget {
                     children: [
                       for (int i = 0; i < snapshot.data!.item2.length; i++) ...{
                         SizedBox(height: 10),
-                        Container(
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SingleMap(id: DbHelper.instance.getLastParcoursId()),
+                              ),
+                            );
+                          },
+                          child: Container(
                           width: 350.0,
                           height: 250.0,
                           decoration: BoxDecoration(
@@ -86,19 +95,10 @@ class ParcoursListe extends StatelessWidget {
                               SizedBox(
                                 child: GPXMap(points: DbHelper.instance.getAllPointsParcours(snapshot.data!.item2[i].parcoursid)), height: 172, width: 348,),
                               SizedBox(height: 7),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => SingleMap(id: DbHelper.instance.getLastParcoursId()),
-                                    ),
-                                  );
-                                },
-                                child: Text("Voir",style: TextStyle(fontSize: 20,color: Colors.white)),
-                              ),
+                              Text("Voir",style: TextStyle(fontSize: 20,color: Colors.white)),
                             ],
                           ),
+                        ),
                         ),
                       },
                     ].toList(),
