@@ -119,7 +119,7 @@ class _GPXMapState extends State<GPXMap> {
         String? date = trk.getElement('time')?.text;
         print(date);
 
-        final ParcoursDTO parcours = ParcoursDTO(null,name,date);
+        //final ParcoursDTO parcours = ParcoursDTO(null,name,date);
         // DbHelper.instance.insertParcours(parcours);
 
         // print('${trk.getElement('name')?.text}');

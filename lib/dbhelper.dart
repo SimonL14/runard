@@ -10,7 +10,7 @@ class DbHelper{
   // Création de constantes (dbName = nom base de donnée // dbPathName = nom du fichier sur le tel qui stock les données // dbVersion = version de la bdd)
   static const dbName = 'runard.db'; // nom schema
   static const dbPathName = 'runard.path'; // nom du fichier sur le tel
-  static const dbVersion = 21; // numéro de version du schema (pour les upgrades)
+  static const dbVersion = 22; // numéro de version du schema (pour les upgrades)
 
   //Instance de connexion à la base de donnée
   static Database? _database;
@@ -214,14 +214,20 @@ class DbHelper{
       var parcourpts = PointsDTO.fromMap(r);
       // on l'ajoute sand la liste de resultat
       resultspts.add(parcourpts);
+      //print(parcourpts);
       if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
       {
         // on instancie un ParcoursDTO sur la base de r
         var parcourparc = ParcoursDTO.fromMap(r);
         // on l'ajoute sand la liste de resultat
         resultsparc.add(parcourparc);
+        //print(parcourparc);
       }
+      /*if (r['id'] == resultSet.length - 1){
+        break;
+      }*/
     }
+    print(resultsparc);
     // On retourne la liste de résultats
     return Tuple2(Future.value(resultspts),Future.value(resultsparc));
 

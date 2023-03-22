@@ -13,7 +13,6 @@ class ParcoursListe extends StatelessWidget {
     final parcoursget = await DbHelper.instance.getAllParcours();
     final parcoursgetpoints = await parcoursget.item1;
     final parcoursgetparcour = await parcoursget.item2;
-    //print(DbHelper.instance.getAllPointsParcours(1));
     return Tuple2(parcoursgetpoints,parcoursgetparcour);
   }
 
