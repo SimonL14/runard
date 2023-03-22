@@ -5,12 +5,15 @@ part 'parcours_dto.g.dart';
 @JsonSerializable() // Permet de générer des méthodes from et toJson
 class ParcoursDTO{
   //Constructeur
-  ParcoursDTO(this.parcoursid, this.nom, this.date);
+  ParcoursDTO(this.parcoursid, this.nom, this.date, this.temps, this.km, this.vitesse);
 
   // Attributs // int? ou String? permet de dire que les attributs peuvent être null
   final int? parcoursid;
   final String? nom;
   final String? date;
+  final String? temps;
+  final String? km;
+  final String? vitesse;
 
   Map<String, dynamic> toJson() => _$ParcoursDTOToJson(this);
 

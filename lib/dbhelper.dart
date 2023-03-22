@@ -10,7 +10,7 @@ class DbHelper{
   // Création de constantes (dbName = nom base de donnée // dbPathName = nom du fichier sur le tel qui stock les données // dbVersion = version de la bdd)
   static const dbName = 'runard.db'; // nom schema
   static const dbPathName = 'runard.path'; // nom du fichier sur le tel
-  static const dbVersion = 20; // numéro de version du schema (pour les upgrades)
+  static const dbVersion = 22; // numéro de version du schema (pour les upgrades)
 
   //Instance de connexion à la base de donnée
   static Database? _database;
@@ -41,7 +41,7 @@ class DbHelper{
   Future _onCreate(Database db, int version) async{
 
     //Table parcours qui possède les infos sur le parcours
-    const String createParcoursTableQuery = 'CREATE TABLE parcours (id integer PRIMARY KEY AUTOINCREMENT, nom VARCHAR(200) NOT NULL, date VARCHAR(200) NOT NULL)';
+    const String createParcoursTableQuery = 'CREATE TABLE parcours (id integer PRIMARY KEY AUTOINCREMENT, nom VARCHAR(200) NOT NULL, date VARCHAR(200) NOT NULL, temps VARCHAR(200) NOT NULL, km VARCHAR(200) NOT NULL, vitesse VARCHAR(200) NOT NULL)';
     db.execute(createParcoursTableQuery);
     print('Création de la table Parcours');
 
@@ -66,7 +66,7 @@ class DbHelper{
   Future<void> insertParcours(final ParcoursDTO parcoursDTO) async{
     //Récupération de l'instance de la db
     Database db = await instance.database;
-    final String insertParcours = "INSERT into parcours (id,nom,date) values (${parcoursDTO.parcoursid},'${parcoursDTO.nom}','${parcoursDTO.date}')";
+    final String insertParcours = "INSERT into parcours (id,nom,date,temps,km,vitesse) values (${parcoursDTO.parcoursid},'${parcoursDTO.nom}','${parcoursDTO.date}','${parcoursDTO.temps}','${parcoursDTO.km}','${parcoursDTO.vitesse}')";
     var execute = db.execute(insertParcours);
     return execute;
   }
@@ -195,4 +195,41 @@ class DbHelper{
     print("requete modif dbhelp");
   }
 
+  //Permet de récupérer la liste des parcours
+  Future<Tuple2<Future<List<PointsDTO>>, Future<List<ParcoursDTO>>>> orderByDate() async {
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+
+    // execution query
+    final resultSet = await db.rawQuery("SELECT * from parcours INNER JOIN  points on parcours.id = points.parcoursid ORDER BY parcours.date");
+
+    // On initialise un liste de parcours vide
+    final List<PointsDTO> resultspts = <PointsDTO>[];
+    final List<ParcoursDTO> resultsparc = <ParcoursDTO>[];
+
+    print(resultSet);
+    //On parcours les résultats
+    for (var r in resultSet){
+      // on instancie un ParcoursDTO sur la base de r
+      var parcourpts = PointsDTO.fromMap(r);
+      // on l'ajoute sand la liste de resultat
+      resultspts.add(parcourpts);
+      //print(parcourpts);
+      if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
+      {
+        // on instancie un ParcoursDTO sur la base de r
+        var parcourparc = ParcoursDTO.fromMap(r);
+        // on l'ajoute sand la liste de resultat
+        resultsparc.add(parcourparc);
+        //print(parcourparc);
+      }
+      /*if (r['id'] == resultSet.length - 1){
+        break;
+      }*/
+    }
+    print(resultsparc);
+    // On retourne la liste de résultats
+    return Tuple2(Future.value(resultspts),Future.value(resultsparc));
+
+  }
 }
