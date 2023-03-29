@@ -86,34 +86,41 @@ class DbHelper{
     return getParcoursId[0]['max(id)'] as int;
   }
 
+  Future<int> getFirstPointsId() async {
+    Database db = await instance.database;
+    final getPointsId = await db.rawQuery("Select min(id) FROM points");
+    return getPointsId[0]['min(id)'] as int;
+  }
+
+  Future<int> getLastPointsId() async {
+    Database db = await instance.database;
+    final getPointsId = await db.rawQuery("Select max(id) FROM points");
+    return getPointsId[0]['max(id)'] as int;
+  }
+
   //Permet de récupérer la liste des parcours
   Future<Tuple2<Future<List<PointsDTO>>, Future<List<ParcoursDTO>>>> getAllParcours() async {
     //Récupération de l'instance de la db
     Database db = await instance.database;
 
     // execution query
-    final resultSet = await db.rawQuery("SELECT * from parcours INNER JOIN  points on parcours.id = points.parcoursid");
+    final resultSet = await db.rawQuery("SELECT * from parcours INNER JOIN points on parcours.id = points.parcoursid");
 
     // On initialise un liste de parcours vide
     final List<PointsDTO> resultspts = <PointsDTO>[];
     final List<ParcoursDTO> resultsparc = <ParcoursDTO>[];
 
-    print(resultSet);
+    final firstid = await instance.getFirstPointsId();
+    final lastid = await instance.getLastPointsId();
+
     //On parcours les résultats
     for (var r in resultSet){
-      // on instancie un ParcoursDTO sur la base de r
       var parcourpts = PointsDTO.fromMap(r);
-      // on l'ajoute dans la liste de resultat
       resultspts.add(parcourpts);
-      if (
-          int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1
-          && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid']
-          || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
-      {
-        // on instancie un ParcoursDTO sur la base de r
-        var parcourparc = ParcoursDTO.fromMap(resultSet[int.parse(r['id'].toString())]);
-        // on l'ajoute sand la liste de resultat
+      if ( resultsparc.isEmpty || resultspts.last.parcoursid != resultsparc.last.parcoursid){
+        var parcourparc = ParcoursDTO.fromMap(r);
         resultsparc.add(parcourparc);
+        print(resultsparc);
       }
     }
     // On retourne la liste de résultats
