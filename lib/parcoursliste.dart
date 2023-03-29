@@ -7,6 +7,8 @@ import 'dbhelper.dart';
 import 'home.dart';
 import 'package:tuple/tuple.dart';
 
+import 'import.dart';
+
 class ParcoursListe extends StatelessWidget {
 
   Future<Tuple2<List<PointsDTO>, List<ParcoursDTO>>> callAsyncFetch() async {
@@ -30,7 +32,12 @@ class ParcoursListe extends StatelessWidget {
                 centerTitle: false,
                 titleSpacing: 0.0,
                 backgroundColor: Color(0xFF001420),
-                actions: <Widget>[],
+                actions: <Widget>[IconButton(
+                  icon: Icon(
+                    Icons.filter_list,
+                  ),
+                  onPressed: () {},
+                ),],
               ),
               drawer: Drawer(
                 backgroundColor: Color(0xFF005F8F),
@@ -55,6 +62,19 @@ class ParcoursListe extends StatelessWidget {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ParcoursListe()));
                       },
                     ),
+                    ListTile(
+                      title: Row(
+                        children: [
+                          Icon(Icons.add_circle_outline),
+                          SizedBox(width: 10),
+                          Text("Importer", style: TextStyle(fontSize: 20,color: Colors.white)),
+                        ],
+                      ),
+                      onTap: () {
+                        print("hello");
+                        openFiles();
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -71,7 +91,7 @@ class ParcoursListe extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => SingleMap(id: DbHelper.instance.getLastParcoursId()),
+                                builder: (context) => SingleMap(id: snapshot.data!.item2[i].parcoursid),
                               ),
                             );
                           },
@@ -108,7 +128,13 @@ class ParcoursListe extends StatelessWidget {
             );
 
           } else {
-            return CircularProgressIndicator();
+            return Center(
+              child: SizedBox(
+                width: 40,
+                height: 40,
+                child: CircularProgressIndicator(),
+              ),
+            );
           }
         }
     );
