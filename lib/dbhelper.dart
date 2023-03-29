@@ -103,7 +103,7 @@ class DbHelper{
     for (var r in resultSet){
       // on instancie un ParcoursDTO sur la base de r
       var parcourpts = PointsDTO.fromMap(r);
-      // on l'ajoute sand la liste de resultat
+      // on l'ajoute dans la liste de resultat
       resultspts.add(parcourpts);
       if (
           int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1
@@ -195,13 +195,52 @@ class DbHelper{
     print("requete modif dbhelp");
   }
 
-  //Permet de récupérer la liste des parcours
+  //Permet de trier par Date
   Future<Tuple2<Future<List<PointsDTO>>, Future<List<ParcoursDTO>>>> orderByDate() async {
     //Récupération de l'instance de la db
     Database db = await instance.database;
 
     // execution query
     final resultSet = await db.rawQuery("SELECT * from parcours INNER JOIN  points on parcours.id = points.parcoursid ORDER BY parcours.date");
+
+    // On initialise un liste de parcours vide
+    final List<PointsDTO> resultspts = <PointsDTO>[];
+    final List<ParcoursDTO> resultsparc = <ParcoursDTO>[];
+
+    print(resultSet);
+    //On parcours les résultats
+    for (var r in resultSet){
+      // on instancie un ParcoursDTO sur la base de r
+      var parcourpts = PointsDTO.fromMap(r);
+      // on l'ajoute sand la liste de resultat
+      resultspts.add(parcourpts);
+      //print(parcourpts);
+      if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
+      {
+        // on instancie un ParcoursDTO sur la base de r
+        var parcourparc = ParcoursDTO.fromMap(r);
+        // on l'ajoute sand la liste de resultat
+        resultsparc.add(parcourparc);
+        print("parcoursparc : $parcourparc");
+        print("resultparc : $resultsparc");
+      }
+      /*if (r['id'] == resultSet.length - 1){
+        break;
+      }*/
+    }
+    print("result final parc: $resultsparc");
+    print("result final pts: $resultspts");
+    // On retourne la liste de résultats
+    return Tuple2(Future.value(resultspts),Future.value(resultsparc));
+  }
+
+  //Permet de trier par km
+  Future<Tuple2<Future<List<PointsDTO>>, Future<List<ParcoursDTO>>>> orderByKm() async {
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+
+    // execution query
+    final resultSet = await db.rawQuery("SELECT * from parcours INNER JOIN  points on parcours.id = points.parcoursid ORDER BY parcours.km");
 
     // On initialise un liste de parcours vide
     final List<PointsDTO> resultspts = <PointsDTO>[];
@@ -230,6 +269,45 @@ class DbHelper{
     print(resultsparc);
     // On retourne la liste de résultats
     return Tuple2(Future.value(resultspts),Future.value(resultsparc));
-
   }
+
+  //Permet de trier par km
+  Future<Tuple2<Future<List<PointsDTO>>, Future<List<ParcoursDTO>>>> orderByVitesse() async {
+    //Récupération de l'instance de la db
+    Database db = await instance.database;
+
+    // execution query
+    final resultSet = await db.rawQuery("SELECT * from parcours INNER JOIN  points on parcours.id = points.parcoursid ORDER BY parcours.vitesse");
+
+    // On initialise un liste de parcours vide
+    final List<PointsDTO> resultspts = <PointsDTO>[];
+    final List<ParcoursDTO> resultsparc = <ParcoursDTO>[];
+
+    print(resultSet);
+    //On parcours les résultats
+    for (var r in resultSet){
+      // on instancie un ParcoursDTO sur la base de r
+      var parcourpts = PointsDTO.fromMap(r);
+      // on l'ajoute sand la liste de resultat
+      resultspts.add(parcourpts);
+      //print(parcourpts);
+      if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
+      {
+        // on instancie un ParcoursDTO sur la base de r
+        var parcourparc = ParcoursDTO.fromMap(r);
+        // on l'ajoute sand la liste de resultat
+        resultsparc.add(parcourparc);
+        //print(parcourparc);
+      }
+      /*if (r['id'] == resultSet.length - 1){
+        break;
+      }*/
+    }
+    print(resultsparc);
+    // On retourne la liste de résultats
+    return Tuple2(Future.value(resultspts),Future.value(resultsparc));
+  }
+
+
+
 }
