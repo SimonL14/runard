@@ -110,9 +110,6 @@ class DbHelper{
     final List<PointsDTO> resultspts = <PointsDTO>[];
     final List<ParcoursDTO> resultsparc = <ParcoursDTO>[];
 
-    final firstid = await instance.getFirstPointsId();
-    final lastid = await instance.getLastPointsId();
-
     //On parcours les résultats
     for (var r in resultSet){
       var parcourpts = PointsDTO.fromMap(r);
@@ -217,23 +214,13 @@ class DbHelper{
     print(resultSet);
     //On parcours les résultats
     for (var r in resultSet){
-      // on instancie un ParcoursDTO sur la base de r
       var parcourpts = PointsDTO.fromMap(r);
-      // on l'ajoute sand la liste de resultat
       resultspts.add(parcourpts);
-      //print(parcourpts);
-      if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
-      {
-        // on instancie un ParcoursDTO sur la base de r
+      if ( resultsparc.isEmpty || resultspts.last.parcoursid != resultsparc.last.parcoursid){
         var parcourparc = ParcoursDTO.fromMap(r);
-        // on l'ajoute sand la liste de resultat
         resultsparc.add(parcourparc);
-        print("parcoursparc : $parcourparc");
-        print("resultparc : $resultsparc");
+        print(resultsparc);
       }
-      /*if (r['id'] == resultSet.length - 1){
-        break;
-      }*/
     }
     print("result final parc: $resultsparc");
     print("result final pts: $resultspts");
@@ -256,22 +243,13 @@ class DbHelper{
     print(resultSet);
     //On parcours les résultats
     for (var r in resultSet){
-      // on instancie un ParcoursDTO sur la base de r
       var parcourpts = PointsDTO.fromMap(r);
-      // on l'ajoute sand la liste de resultat
       resultspts.add(parcourpts);
-      //print(parcourpts);
-      if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
-      {
-        // on instancie un ParcoursDTO sur la base de r
+      if ( resultsparc.isEmpty || resultspts.last.parcoursid != resultsparc.last.parcoursid){
         var parcourparc = ParcoursDTO.fromMap(r);
-        // on l'ajoute sand la liste de resultat
         resultsparc.add(parcourparc);
-        //print(parcourparc);
+        print(resultsparc);
       }
-      /*if (r['id'] == resultSet.length - 1){
-        break;
-      }*/
     }
     print(resultsparc);
     // On retourne la liste de résultats
@@ -293,22 +271,13 @@ class DbHelper{
     print(resultSet);
     //On parcours les résultats
     for (var r in resultSet){
-      // on instancie un ParcoursDTO sur la base de r
       var parcourpts = PointsDTO.fromMap(r);
-      // on l'ajoute sand la liste de resultat
       resultspts.add(parcourpts);
-      //print(parcourpts);
-      if (int.parse(resultSet[int.parse(r['id'].toString())-1]['id'].toString())! < resultSet.length-1 && resultSet[int.parse(r['id'].toString())]['parcoursid'] != resultSet[int.parse(r['id'].toString())-1]['parcoursid'] || resultSet[int.parse(r['id'].toString())-1]['id'] == 1)
-      {
-        // on instancie un ParcoursDTO sur la base de r
+      if ( resultsparc.isEmpty || resultspts.last.parcoursid != resultsparc.last.parcoursid){
         var parcourparc = ParcoursDTO.fromMap(r);
-        // on l'ajoute sand la liste de resultat
         resultsparc.add(parcourparc);
-        //print(parcourparc);
+        print(resultsparc);
       }
-      /*if (r['id'] == resultSet.length - 1){
-        break;
-      }*/
     }
     print(resultsparc);
     // On retourne la liste de résultats
